@@ -8,10 +8,7 @@ import pymongo
 @st.cache_resource
 def init_connection():
     try:
-        mongo_secrets = st.secrets['mongo']
-        client = pymongo.MongoClient(
-            host=mongo_secrets['url'] # Optional
-        )
+        client = pymongo.MongoClient(**st.secrets['mongo'])
         return client
     except pymongo.errors.ServerSelectionTimeoutError as e:
         st.error(f"Failed to connect to MongoDB: {e}")
