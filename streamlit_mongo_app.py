@@ -7,7 +7,11 @@ import pymongo
 # Uses st.cache_resource to only run once.
 @st.cache_resource
 def init_connection():
-    return pymongo.MongoClient("mongodb+srv://test_user:xvkhjtadZBC7quE3@cluster0.p2ghqha.mongodb.net/?retryWrites=true&w=majority")
+    try:
+        return pymongo.MongoClient(st.secrets['mongo']['url'])
+    except pymongo.errors.ServerSelectionTimeoutError as e:
+        st.error(f"Failed to connect to MongoDB: {e}")
+        raise e
 
 client = init_connection()
 
